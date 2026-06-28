@@ -1,13 +1,13 @@
 import sqlite3
-import os
+from config import Config
 
 db_connection = None
-db_path = "loja.db"
+
 
 def get_db():
     global db_connection
     if db_connection is None:
-        db_connection = sqlite3.connect(db_path, check_same_thread=False)
+        db_connection = sqlite3.connect(Config.DB_PATH, check_same_thread=False)
         db_connection.row_factory = sqlite3.Row
         cursor = db_connection.cursor()
 
