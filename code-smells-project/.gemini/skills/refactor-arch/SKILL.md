@@ -41,11 +41,14 @@ A skill deve usar os arquivos de referência abaixo para guiar cada fase:
 ### Fase 3 — Refatoração
 
 1. Reestruture o projeto para o padrão MVC.
-2. Extraia configuração e segredos para um módulo de config separado.
-3. Separe models, controllers/serviços e views/routes de acordo com o stack.
-4. Centralize tratamento de erros e normalize respostas JSON.
-5. Preserve os endpoints originais e o comportamento funcional da aplicação.
-6. Valide a aplicação iniciando-a e conferindo os endpoints básicos de saúde e de recursos principais.
+2. Aplique integralmente os achados de segurança e arquitetura identificados na Fase 2.
+3. Remova todos os segredos e credenciais hardcoded (como dbPass, paymentGatewayKey, etc.), extraindo-os para variáveis de ambiente ou arquivo de configuração centralizado.
+4. Substitua algoritmos de hash inseguros ou customizados (como MD5, badCrypto, etc.) por padrões seguros (ex: `generate_password_hash` da `werkzeug.security` no Python/Flask e módulo nativo `crypto` com HMAC/SHA-256 no Node.js/Express).
+5. Certifique-se de que serializações de modelos e retornos de APIs (como o método `to_dict` no Python ou retornos diretos do banco no Node.js) NÃO exponham dados sensíveis (ex: senhas e chaves privadas).
+6. Separe models, controllers/serviços e views/routes de acordo com o stack.
+7. Centralize tratamento de erros e normalize respostas JSON.
+8. Preserve os endpoints originais e o comportamento funcional da aplicação.
+9. Valide a aplicação iniciando-a e conferindo os endpoints básicos de saúde e de recursos principais.
 
 ## Regras de comportamento
 

@@ -1,6 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
 const { config } = require('../config');
-const { logAndCache, badCrypto } = require('../utils');
+const { logAndCache, hashPassword } = require('../utils');
 
 class CheckoutService {
   constructor(db) {
@@ -38,7 +38,7 @@ class CheckoutService {
           };
 
           if (!user) {
-            const hash = badCrypto(password || '123456');
+            const hash = hashPassword(password || '123456');
             this.db.run('INSERT INTO users (name, email, pass) VALUES (?, ?, ?)', [userName, email, hash], function (insertErr) {
               if (insertErr) return reject(new Error('Erro ao criar usuário'));
               processPaymentAndEnroll(this.lastID);

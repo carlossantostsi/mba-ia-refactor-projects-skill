@@ -125,3 +125,69 @@ After:
 # config/settings.py
 SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI', 'sqlite:///tasks.db')
 ```
+
+## 9. Padrões de Hash Seguro
+Before (Python):
+```python
+import hashlib
+self.password = hashlib.md5(pwd.encode()).hexdigest()
+```
+After (Python):
+```python
+from werkzeug.security import generate_password_hash, check_password_hash
+self.password = generate_password_hash(pwd)
+```
+
+Before (Node.js):
+```js
+function badCrypto(pwd) {
+    let hash = "";
+    for(let i = 0; i < 10000; i++) {
+        hash += Buffer.from(pwd).toString('base64').substring(0, 2);
+    }
+    return hash.substring(0, 10);
+}
+```
+After (Node.js):
+```js
+const crypto = require('crypto');
+function hashPassword(pwd) {
+    const salt = 'super-secret-salt-key';
+    return crypto.createHmac('sha256', salt).update(pwd).digest('hex');
+}
+```
+
+## 10. Remoção de segredo do código
+Before:
+```js
+const config = {
+    dbPass: "senha_super_secreta_prod_123", 
+    paymentGatewayKey: "pk_live_1234567890abcdef"
+};
+```
+After:
+```js
+const config = {
+    dbPass: process.env.DB_PASS || "", 
+    paymentGatewayKey: process.env.PAYMENT_GATEWAY_KEY || ""
+};
+```
+
+## 11. Serialização sem dado sensível
+Before (Python):
+```python
+def to_dict(self):
+    return {
+        'id': self.id,
+        'email': self.email,
+        'password': self.password
+    }
+```
+After (Python):
+```python
+def to_dict(self):
+    return {
+        'id': self.id,
+        'email': self.email
+    }
+```
