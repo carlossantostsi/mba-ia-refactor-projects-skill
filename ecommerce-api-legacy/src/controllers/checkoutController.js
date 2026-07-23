@@ -25,8 +25,14 @@ class CheckoutController {
 
   deleteUser(req, res) {
     const { id } = req.params;
-    res.send('Usuário deletado, mas as matrículas e pagamentos ficaram sujos no banco.');
+    this.checkoutService.deleteUser(id)
+      .then((result) => res.status(200).json(result))
+      .catch((error) => {
+        if (error.message === 'Usuário não encontrado') return res.status(404).send('Usuário não encontrado');
+        return res.status(500).send(error.message || 'Erro ao remover usuário');
+      });
   }
+
 }
 
 module.exports = CheckoutController;

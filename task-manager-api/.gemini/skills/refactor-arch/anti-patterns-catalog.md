@@ -61,3 +61,8 @@
 - Sinais: inclusão de senhas, chaves ou segredos em retornos de API ou em métodos de serialização como `to_dict()`.
 - Recomendação: excluir chaves confidenciais do payload serializado antes de retornar ao cliente.
 
+## 13. Endpoints Administrativos Perigosos (SQL Arbitrário)
+- Severidade: HIGH
+- Sinais: rotas administrativas desprotegidas ou sem sanotização que executam SQL arbitrário enviado pelo cliente no corpo da requisição (ex: `/admin/query`).
+- Recomendação: remover o endpoint inseguro ou desativar a execução de SQL arbitrário vindo da requisição, restringindo o acesso e utilizando consultas parametrizadas pré-definidas se necessário.
+

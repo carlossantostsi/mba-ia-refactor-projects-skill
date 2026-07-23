@@ -73,18 +73,16 @@ def reset_database():
 
 @app.route("/admin/query", methods=["POST"])
 def executar_query():
-    dados = request.get_json() or {}
-    query = dados.get("sql", "")
-    if not query:
-        return jsonify({"erro": "Query não informada"}), 400
+    return (
+        jsonify(
+            {
+                "erro": "Endpoint desativado por motivos de segurança: execução de SQL arbitrário não permitida",
+                "sucesso": False,
+            }
+        ),
+        403,
+    )
 
-    try:
-        from services.store_service import execute_query
-
-        result = execute_query(query)
-        return jsonify({"dados": result, "sucesso": True}), 200
-    except Exception as e:
-        return jsonify({"erro": str(e)}), 500
 
 
 if __name__ == "__main__":

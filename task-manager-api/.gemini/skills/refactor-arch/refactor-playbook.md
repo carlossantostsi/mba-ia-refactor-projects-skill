@@ -191,3 +191,28 @@ def to_dict(self):
         'email': self.email
     }
 ```
+
+## 12. Endpoints Administrativos Perigosos (SQL Arbitrário / Execução Sem Restrição)
+Before:
+```python
+# app.py / routes
+@app.route('/admin/query', methods=['POST'])
+def executar_query():
+    dados = request.get_json() or {}
+    query = dados.get('sql', '')
+    cursor.execute(query) # Risco grave: executa SQL arbitrário vindo do corpo da requisição
+    ...
+```
+After (Opção Recomendada: Remoção / Desativação de Endpoint Inseguro):
+```python
+# Remover a rota vulnerável ou retornar erro 403 proibindo a execução de SQL arbitrário
+@app.route('/admin/query', methods=['POST'])
+def executar_query():
+    return jsonify({'erro': 'Endpoint desativado por motivos de segurança'}), 403
+```
+After (Opção Alternativa: Restrição por Autenticação e Consultas Parametrizadas):
+```python
+# Se a funcionalidade for indispensável, restrinja o acesso a usuários autenticados/autorizados
+# e substitua a execução de SQL arbitrário por consultas parametrizadas pré-definidas.
+```
+

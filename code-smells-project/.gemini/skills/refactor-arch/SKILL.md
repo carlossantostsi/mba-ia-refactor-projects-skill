@@ -41,14 +41,16 @@ A skill deve usar os arquivos de referência abaixo para guiar cada fase:
 ### Fase 3 — Refatoração
 
 1. Reestruture o projeto para o padrão MVC.
-2. Aplique integralmente os achados de segurança e arquitetura identificados na Fase 2.
-3. Remova todos os segredos e credenciais hardcoded (como dbPass, paymentGatewayKey, etc.), extraindo-os para variáveis de ambiente ou arquivo de configuração centralizado.
-4. Substitua algoritmos de hash inseguros ou customizados (como MD5, badCrypto, etc.) por padrões seguros (ex: `generate_password_hash` da `werkzeug.security` no Python/Flask e módulo nativo `crypto` com HMAC/SHA-256 no Node.js/Express).
-5. Certifique-se de que serializações de modelos e retornos de APIs (como o método `to_dict` no Python ou retornos diretos do banco no Node.js) NÃO exponham dados sensíveis (ex: senhas e chaves privadas).
-6. Separe models, controllers/serviços e views/routes de acordo com o stack.
-7. Centralize tratamento de erros e normalize respostas JSON.
-8. Preserve os endpoints originais e o comportamento funcional da aplicação.
-9. Valide a aplicação iniciando-a e conferindo os endpoints básicos de saúde e de recursos principais.
+2. Aplique integralmente os achados de segurança e arquitetura apontados no relatório da Fase 2 (especialmente achados CRITICAL e HIGH).
+3. Remova ou proteja endpoints administrativos perigosos que executem SQL arbitrário (como `/admin/query`), desativando a execução de SQL cru vindo do corpo da requisição.
+4. Remova todos os segredos e credenciais hardcoded (como dbPass, paymentGatewayKey, etc.), extraindo-os para variáveis de ambiente ou arquivo de configuração centralizado.
+5. Substitua algoritmos de hash inseguros ou customizados (como MD5, badCrypto, etc.) por padrões seguros (ex: `generate_password_hash` da `werkzeug.security` no Python/Flask e módulo nativo `crypto` com HMAC/SHA-256 no Node.js/Express).
+6. Certifique-se de que serializações de modelos e retornos de APIs (como o método `to_dict` no Python ou retornos diretos do banco no Node.js) NÃO exponham dados sensíveis (ex: senhas e chaves privadas).
+7. Separe models, controllers/serviços e views/routes de acordo com o stack.
+8. Centralize tratamento de erros e normalize respostas JSON.
+9. Preserve os endpoints originais e o comportamento funcional da aplicação (exceto endpoints inseguros/vulneráveis expressamente apontados na Fase 2 para remoção ou desativação).
+10. Valide a aplicação iniciando-a e conferindo os endpoints básicos de saúde e de recursos principais.
+
 
 ## Regras de comportamento
 

@@ -50,3 +50,19 @@
 - Severidade: LOW
 - Sinais: config espalhada em `app.py`, `database.py`, `src/app.js`, `app.py`.
 - Recomendação: criar `config/settings.py` ou `config/index.js`.
+
+## 11. Hashing Inseguro de Senha (Criptografia Fraca)
+- Severidade: HIGH
+- Sinais: uso de algoritmos obsoletos (MD5, SHA1) ou funções customizadas e fracas (ex: `badCrypto`) para hash de senhas.
+- Recomendação: usar algoritmos robustos com sal (ex: `bcrypt` ou `generate_password_hash` do Werkzeug).
+
+## 12. Exposição de Dados Sensíveis na Serialização
+- Severidade: HIGH
+- Sinais: inclusão de senhas, chaves ou segredos em retornos de API ou em métodos de serialização como `to_dict()`.
+- Recomendação: excluir chaves confidenciais do payload serializado antes de retornar ao cliente.
+
+## 13. Endpoints Administrativos Perigosos (SQL Arbitrário)
+- Severidade: HIGH
+- Sinais: rotas administrativas desprotegidas ou sem sanotização que executam SQL arbitrário enviado pelo cliente no corpo da requisição (ex: `/admin/query`).
+- Recomendação: remover o endpoint inseguro ou desativar a execução de SQL arbitrário vindo da requisição, restringindo o acesso e utilizando consultas parametrizadas pré-definidas se necessário.
+

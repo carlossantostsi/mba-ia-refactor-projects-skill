@@ -264,14 +264,8 @@ def reset_database():
 
 
 def execute_query(query):
-    db = get_db()
-    cursor = db.cursor()
-    cursor.execute(query)
-    if query.strip().upper().startswith("SELECT"):
-        rows = cursor.fetchall()
-        return [dict(row) for row in rows]
-    db.commit()
-    return []
+    raise PermissionError("Execução de SQL arbitrário desativada por motivos de segurança")
+
 
 
 def get_health_summary():

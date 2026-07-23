@@ -94,6 +94,32 @@ class CheckoutService {
       });
     });
   }
+
+  async deleteUser(userId) {
+
+    return new Promise((resolve, reject) => {
+      this.db.get('SELECT id FROM users WHERE id = ?', [userId], (err, user) => {
+        if (err) return reject(new Error('Erro DB'));
+        if (!user) return reject(new Error('Usuário não encontrado'));
+
+        this.db.run(
+          'DELETE FROM payments WHERE enrollment_id IN (SELECT id FROM enrollments WHERE user_id = ?)',
+          [userId],
+          (err) => {
+            if (err) return reject(new Error('Erro ao deletar pagamentos'));
+            this.db.run('DELETE FROM enrollments WHERE user_id = ?', [userId], (err) => {
+              if (err) return reject(new Error('Erro ao deletar matrículas'));
+              this.db.run('DELETE FROM users WHERE id = ?', [userId], (err) => {
+                if (err) return reject(new Error('Erro ao deletar usuário'));
+                resolve({ msg: 'Usuário e dados vinculados removidos com sucesso' });
+              });
+            });
+          }
+        );
+      });
+    });
+  }
 }
+
 
 module.exports = CheckoutService;
